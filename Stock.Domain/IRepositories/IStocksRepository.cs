@@ -1,5 +1,6 @@
 using System.Linq.Expressions;
 using Stock.Domain.Entities;
+using Stock.Domain.Models;
 
 namespace Stock.Domain.IRepositories;
 
@@ -13,6 +14,6 @@ public interface IStocksRepository
     Task BulkAddAsync(List<Stocks> stocks);
     Task UpdateAsync(Stocks stock);
     Task DeleteAsync(int id);
-    Task<Stocks?> GetByVariantCodeAsync(string variantCode);
-    Task<List<Stocks>> GetByProductCodeAsync(char productCode);
+    Task<GetStockByVariantCodeResponseVM?> GetByVariantCodeAsync(string variantCode);
+    Task<List<GetStockByProductCodeResponseVM>> GetByProductCodeAsync(char productCode);
 }

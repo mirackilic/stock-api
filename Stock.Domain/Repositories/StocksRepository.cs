@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Stock.Domain.Context;
 using Stock.Domain.Entities;
 using Stock.Domain.IRepositories;
+using Stock.Domain.Models;
 
 namespace Stock.Domain.Repositories;
 
@@ -64,17 +65,27 @@ public class StocksRepository : IStocksRepository
         await _context.SaveChangesAsync();
     }
 
-    public async Task<Stocks?> GetByVariantCodeAsync(string variantCode)
+    public async Task<GetStockByVariantCodeResponseVM?> GetByVariantCodeAsync(string variantCode)
     {
         return await _context.Stocks
-           .Where(s => s.VariantCode == variantCode)
-           .SingleOrDefaultAsync();
+           .Where(s => s.VariantCode == variantCode).
+            Select(x => new GetStockByVariantCodeResponseVM
+            {
+                Id = x.Id,
+                VariantCode = x.VariantCode,
+                Quantity = x.Quantity
+            }).SingleOrDefaultAsync();
     }
 
-    public async Task<List<Stocks>> GetByProductCodeAsync(char productCode)
+    public async Task<List<GetStockByProductCodeResponseVM>> GetByProductCodeAsync(char productCode)
     {
         return await _context.Stocks
-           .Where(s => s.ProductCode == productCode)
-           .ToListAsync();
+           .Where(s => s.ProductCode == productCode).
+           Select(x => new GetStockByProductCodeResponseVM
+           {
+               Id = x.Id,
+               ProductCode = x.ProductCode,
+               Quantity = x.Quantity
+           }).ToListAsync();
     }
 }

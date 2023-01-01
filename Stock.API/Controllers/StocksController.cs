@@ -5,7 +5,7 @@ using Stock.Domain.IRepositories;
 namespace Stock.API.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/[controller]")]
 public class StocksController : ControllerBase
 {
     private readonly IStocksRepository _stockRepository;
@@ -27,7 +27,7 @@ public class StocksController : ControllerBase
     [HttpPut("{variantCode}")]
     public async Task<IActionResult> PutAsync(string variantCode, [FromQuery] int quantity)
     {
-        var stocks = await _stockRepository.GetByVariantCodeAsync(variantCode);
+        var stocks = await _stockRepository.FindOneAsync(x => x.VariantCode == variantCode);
 
         if (stocks is null)
             throw new ApplicationException("Stock is not exist!");
